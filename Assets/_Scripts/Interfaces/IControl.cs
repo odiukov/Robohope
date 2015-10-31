@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public interface IControl
+﻿public interface IControl
 {
     void Init();
     float GetHorizontal();

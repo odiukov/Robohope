@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 #endif
        // controller = new MobileControl();
         _controller.Init();
-        _myBody = rigidbody2D;
+        _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
         _tagGround = GameObject.Find(this.name + "/groundChecker").transform;
     }
