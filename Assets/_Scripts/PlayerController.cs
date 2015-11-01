@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-
     public float Speed = 10, JumpVelocity = 10;
     public LayerMask PlayerMask;
     public bool CanMoveInAir = true;
@@ -48,5 +47,4 @@ public class PlayerController : MonoBehaviour
         if (_isGrounded)
             _myBody.velocity += JumpVelocity * Vector2.up;
     }
-
 }
