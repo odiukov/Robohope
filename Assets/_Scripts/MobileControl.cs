@@ -15,7 +15,12 @@ public class MobileControl : IControl
 
     public bool Jump()
     {
-        return ControlsInteraction.Jump;
+        if (ControlsInteraction.Jump)
+        {
+            ControlsInteraction.Jump = false;
+            return true;
+        }
+        return false;
     }
 }
 

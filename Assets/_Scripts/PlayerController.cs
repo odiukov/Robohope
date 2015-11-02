@@ -4,11 +4,13 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public float Speed = 10, JumpVelocity = 10;
-    public LayerMask PlayerMask;
+    public LayerMask WhatIsGround;
     public bool CanMoveInAir = true;
-    Transform _myTrans, _tagGround;
-    Rigidbody2D _myBody;
-    bool _isGrounded = false;
+
+    private Transform _myTrans, _tagGround;
+    private Rigidbody2D _myBody;
+    private bool _isGrounded = false;
+    private bool _isFacingRight = true;
     private IControl _controller;
 
     void Start()
@@ -18,7 +20,7 @@ public class PlayerController : MonoBehaviour
 #else
         controller = new MobileControl();
 #endif
-       // controller = new MobileControl();
+        _controller = new MobileControl();
         _controller.Init();
         _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
@@ -26,10 +28,13 @@ public class PlayerController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        _isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, PlayerMask);
+        _isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, WhatIsGround);
         Move(_controller.GetHorizontal());
+    }
 
-        if (_controller.Jump())
+    void Update()
+    {
+        if (_controller.Jump() && _isGrounded && _myBody.velocity.y < 0.01)
             Jump();
     }
 
@@ -37,14 +42,24 @@ public class PlayerController : MonoBehaviour
     {
         if (!CanMoveInAir && !_isGrounded)
             return;
-
+        if (horizonalInput > 0 && !_isFacingRight)
+            Flip();
+        else if (horizonalInput < 0 && _isFacingRight)
+            Flip();
         Vector2 moveVel = _myBody.velocity;
         moveVel.x = horizonalInput * Speed;
         _myBody.velocity = moveVel;
     }
     public void Jump()
     {
-        if (_isGrounded)
-            _myBody.velocity += JumpVelocity * Vector2.up;
+        _myBody.velocity += JumpVelocity * Vector2.up;
+    }
+
+    void Flip()
+    {
+        _isFacingRight = !_isFacingRight;
+        Vector3 scale = _myTrans.localScale;
+        scale.x *= -1;
+        _myTrans.localScale = scale;
     }
 }

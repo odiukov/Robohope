@@ -16,6 +16,6 @@ public class DesktopControl : IControl {
 
     public bool Jump()
     {
-        return Input.GetAxis("Vertical") > 0;
+        return Input.GetKeyUp(KeyCode.Space);
     }
 }
