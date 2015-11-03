@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded = false;
     private bool _isFacingRight = true;
     private IControl _controller;
+    private Animator _animator;
 
     void Start()
     {
@@ -20,8 +21,9 @@ public class PlayerController : MonoBehaviour
 #else
         controller = new MobileControl();
 #endif
-        _controller = new MobileControl();
+        //_controller = new MobileControl();
         _controller.Init();
+        _animator = GetComponent<Animator>();
         _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
         _tagGround = GameObject.Find(this.name + "/groundChecker").transform;
@@ -29,7 +31,13 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         _isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, WhatIsGround);
-        Move(_controller.GetHorizontal());
+        _animator.SetBool("isGrounded", _isGrounded);
+        _animator.SetFloat("vSpeed", _myBody.velocity.y);
+       
+
+        float hSpeed = _controller.GetHorizontal();
+        Move(hSpeed);
+        _animator.SetFloat("hSpeed", Mathf.Abs(hSpeed));
     }
 
     void Update()
@@ -46,12 +54,12 @@ public class PlayerController : MonoBehaviour
             Flip();
         else if (horizonalInput < 0 && _isFacingRight)
             Flip();
-        Vector2 moveVel = _myBody.velocity;
-        moveVel.x = horizonalInput * Speed;
-        _myBody.velocity = moveVel;
+
+        _myBody.velocity = new Vector2(horizonalInput * Speed, _myBody.velocity.y);
     }
     public void Jump()
     {
+        _animator.SetBool("isGrounded", false);
         _myBody.velocity += JumpVelocity * Vector2.up;
     }
 
