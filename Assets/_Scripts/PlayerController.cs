@@ -7,13 +7,17 @@ public class PlayerController : MonoBehaviour
     public LayerMask WhatIsGround;
     public bool CanMoveInAir = true;
 
-    private Transform _myTrans, _tagGround;
+    private Transform _myTrans;
+    [SerializeField]
+    private GameObject _tagGround;
     private Rigidbody2D _myBody;
     private bool _isGrounded = false;
     private bool _isFacingRight = true;
     private IControl _controller;
     private Animator _animator;
 
+    private Collider2D _tagGroundCol;
+    private int platformLayer = 0;
     void Start()
     {
 #if !UNITY_ANDROID && !UNITY_IPHONE && !UNITY_BLACKBERRY && !UNITY_WINRT || UNITY_EDITOR
@@ -21,16 +25,18 @@ public class PlayerController : MonoBehaviour
 #else
         controller = new MobileControl();
 #endif
-        //_controller = new MobileControl();
         _controller.Init();
         _animator = GetComponent<Animator>();
         _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
-        _tagGround = GameObject.Find(this.name + "/groundChecker").transform;
+        _tagGroundCol = _tagGround.GetComponent<Collider2D>();
+        platformLayer = LayerMask.NameToLayer("Platforms");
     }
     void FixedUpdate()
     {
-        _isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, WhatIsGround);
+        Physics2D.IgnoreLayerCollision(_tagGround.layer, platformLayer, _myBody.velocity.y > 0);
+        _isGrounded = Physics2D.IsTouchingLayers(_tagGroundCol, WhatIsGround);
+        //_isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, WhatIsGround);
         _animator.SetBool("isGrounded", _isGrounded);
         _animator.SetFloat("vSpeed", _myBody.velocity.y);
        
@@ -42,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (_controller.Jump() && _isGrounded && _myBody.velocity.y < 0.01)
+        if (_controller.Jump() && _isGrounded)
             Jump();
     }
 
