@@ -13,7 +13,7 @@ GameObject:
   - 50: {fileID: 5084806}
   - 61: {fileID: 6132882}
   - 114: {fileID: 11412980}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -28,10 +28,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 481750}
-  m_Layer: 8
+  - 58: {fileID: 5841748}
+  m_Layer: 10
   m_Name: groundChecker
   m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -42,7 +43,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 144224}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.11999989, y: .430000007, z: 0}
+  m_LocalPosition: {x: 10, y: 2.1400001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 481750}
@@ -55,7 +56,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 160914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0659999996, y: -1.29299998, z: 0}
+  m_LocalPosition: {x: -.0399999991, y: -1.04999995, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 414496}
@@ -76,6 +77,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!58 &5841748
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 160914}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: .200000003
 --- !u!61 &6132882
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -86,9 +100,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: -.100000001, y: -.170000002}
+  m_Offset: {x: -.0799999982, y: -0}
   serializedVersion: 2
-  m_Size: {x: .449999988, y: 2.20000005}
+  m_Size: {x: .449999988, y: 1.84000003}
 --- !u!95 &9544350
 Animator:
   serializedVersion: 3
@@ -121,8 +135,9 @@ MonoBehaviour:
   JumpVelocity: 7
   WhatIsGround:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 2304
   CanMoveInAir: 1
+  _tagGround: {fileID: 160914}
 --- !u!212 &21251502
 SpriteRenderer:
   m_ObjectHideFlags: 1

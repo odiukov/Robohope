@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
 
     private Collider2D _tagGroundCol;
-    private int platformLayer = 0;
     void Start()
     {
 #if !UNITY_ANDROID && !UNITY_IPHONE && !UNITY_BLACKBERRY && !UNITY_WINRT || UNITY_EDITOR
@@ -30,13 +29,10 @@ public class PlayerController : MonoBehaviour
         _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
         _tagGroundCol = _tagGround.GetComponent<Collider2D>();
-        platformLayer = LayerMask.NameToLayer("Platforms");
     }
     void FixedUpdate()
     {
-        Physics2D.IgnoreLayerCollision(_tagGround.layer, platformLayer, _myBody.velocity.y > 0);
         _isGrounded = Physics2D.IsTouchingLayers(_tagGroundCol, WhatIsGround);
-        //_isGrounded = Physics2D.Linecast(_myTrans.position, _tagGround.position, WhatIsGround);
         _animator.SetBool("isGrounded", _isGrounded);
         _animator.SetFloat("vSpeed", _myBody.velocity.y);
        
