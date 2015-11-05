@@ -14,7 +14,6 @@ public class PlayerStats : MonoBehaviour
     public float JumpForce { get { return _jumpForce; } }
 
     public LayerMask WhatIsGround;
-    public bool CanMoveInAir = true;
 
     private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
     private Vector3 healthScale;				// The local scale of the health bar initially (with full health).

@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
        
 
         float hSpeed = _controller.GetHorizontal();
-        Move(hSpeed);
         _animator.SetFloat("hSpeed", Mathf.Abs(hSpeed));
+        Move(hSpeed);
     }
 
     void Update()
@@ -46,8 +46,6 @@ public class PlayerController : MonoBehaviour
 
     void Move(float horizonalInput)
     {
-        if (!PlayerStats.Instance.CanMoveInAir && !_isGrounded)
-            return;
         if (horizonalInput > 0 && !_isFacingRight)
             Flip();
         else if (horizonalInput < 0 && _isFacingRight)

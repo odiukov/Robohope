@@ -10,6 +10,10 @@ public class CameraFollow : MonoBehaviour {
 
     public float smoothing = 0.15f;
 
+    void Awake()
+    {
+        transform.position = new Vector3(target.position.x + offsetX, target.position.y + offsetY, transform.position.z);
+    }
     void Update()
     {
         if (target)
