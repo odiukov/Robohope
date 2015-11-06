@@ -4,13 +4,12 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     private Transform _myTrans;
-    private GameObject _tagGround;
     private Rigidbody2D _myBody;
     private bool _isGrounded = false;
     private bool _isFacingRight = true;
     private IControl _controller;
     private Animator _animator;
-
+    [SerializeField]
     private Collider2D _tagGroundCol;
     void Start()
     {
@@ -23,8 +22,6 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
-        _tagGround = GameObject.Find(this.name + "/groundChecker");
-        _tagGroundCol = _tagGround.GetComponent<Collider2D>();
     }
     void FixedUpdate()
     {
