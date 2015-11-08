@@ -14,9 +14,13 @@ public class PlayerStats : MonoBehaviour
     public float JumpForce { get { return _jumpForce; } }
 
     public LayerMask WhatIsGround;
-
-    private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
-    private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
+    private Animator _animator;
+    public Animator Animator { get { return _animator; } }
+    private Rigidbody2D _myBody;
+    public Rigidbody2D Body { get { return _myBody; } }
+    private SpriteRenderer healthBar;
+    private Vector3 healthScale;
+    public bool isDead { get; set; }
 
     public static PlayerStats Instance
     {
@@ -30,8 +34,10 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
+        _myBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
         healthBar = transform.Find("HealthBar").GetComponent<SpriteRenderer>();
         healthScale = healthBar.transform.localScale;
     }
@@ -42,10 +48,14 @@ public class PlayerStats : MonoBehaviour
 
         if (_hp > _maxHP)
             _hp = 100;
-        else if (_hp < 0)
+        else if (_hp <= 0)
         {
             _hp = 0;
-            Death();
+            _myBody.isKinematic = true;
+            isDead = true;
+            Animator.SetBool("isGrounded", true);
+            Animator.Play("death");
+            StartCoroutine("Death", 1f); ;
         }
         UpdateHealthBar();
     }
@@ -56,9 +66,14 @@ public class PlayerStats : MonoBehaviour
         healthBar.transform.localScale = new Vector3(healthScale.x * _hp * 0.01f, 1, 1);
     }
 
-    public void Death()
+    IEnumerator Death(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Application.LoadLevel(0);
+    }
+    /*public void Death()
     {
         Debug.Log("You dead");
         Application.LoadLevel(0);
-    }
+    }*/
 }

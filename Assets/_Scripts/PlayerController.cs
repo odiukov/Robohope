@@ -4,11 +4,9 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     private Transform _myTrans;
-    private Rigidbody2D _myBody;
     private bool _isGrounded = false;
     private bool _isFacingRight = true;
     private IControl _controller;
-    private Animator _animator;
     [SerializeField]
     private Collider2D _tagGroundCol;
     void Start()
@@ -19,20 +17,20 @@ public class PlayerController : MonoBehaviour
         _controller = new MobileControl();
 #endif
         _controller.Init();
-        _animator = GetComponent<Animator>();
-        _myBody = GetComponent<Rigidbody2D>();
         _myTrans = transform;
     }
     void FixedUpdate()
     {
-        _isGrounded = Physics2D.IsTouchingLayers(_tagGroundCol, PlayerStats.Instance.WhatIsGround);
-        _animator.SetBool("isGrounded", _isGrounded);
-        _animator.SetFloat("vSpeed", _myBody.velocity.y);
-       
+        if (!PlayerStats.Instance.isDead)
+        {
+            _isGrounded = Physics2D.IsTouchingLayers(_tagGroundCol, PlayerStats.Instance.WhatIsGround);
+            PlayerStats.Instance.Animator.SetBool("isGrounded", _isGrounded);
+            PlayerStats.Instance.Animator.SetFloat("vSpeed", PlayerStats.Instance.Body.velocity.y);
 
-        float hSpeed = _controller.GetHorizontal();
-        _animator.SetFloat("hSpeed", Mathf.Abs(hSpeed));
-        Move(hSpeed);
+            float hSpeed = _controller.GetHorizontal();
+            PlayerStats.Instance.Animator.SetFloat("hSpeed", Mathf.Abs(hSpeed));
+            Move(hSpeed);
+        }
     }
 
     void Update()
@@ -47,14 +45,13 @@ public class PlayerController : MonoBehaviour
             Flip();
         else if (horizonalInput < 0 && _isFacingRight)
             Flip();
-        _myBody.velocity = new Vector2(horizonalInput * PlayerStats.Instance.Speed, _myBody.velocity.y);
+        PlayerStats.Instance.Body.velocity = new Vector2(horizonalInput * PlayerStats.Instance.Speed, PlayerStats.Instance.Body.velocity.y);
     }
     public void Jump()
     {
-        _animator.SetBool("isGrounded", false);
-        _myBody.velocity += PlayerStats.Instance.JumpForce * Vector2.up;
+        PlayerStats.Instance.Animator.SetBool("isGrounded", false);
+        PlayerStats.Instance.Body.velocity += PlayerStats.Instance.JumpForce * Vector2.up;
     }
-
     void Flip()
     {
         _isFacingRight = !_isFacingRight;
